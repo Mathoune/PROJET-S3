@@ -23,16 +23,17 @@ ecrire_position_sortie (FILE * f, SLIDER S)	//ecrit la position de la sortie dan
   char c;
   POINT p;
   a = 0;
+  fprintf (stderr,
+	   "Cliquez pour afficher la sortie \n");
   while (a != EST_CLIC)
     {
       a = wait_key_arrow_clic (&c, &fl, &p);
-      SDL_EnableKeyRepeat (0, SDL_DEFAULT_REPEAT_INTERVAL);
+      SDL_EnableKeyRepeat (0, SDL_DEFAULT_REPEAT_INTERVAL);	//Enleve la repition des touches
     }
   S.sx = p.x / Taille_Case;
   S.sy = p.y / Taille_Case;
   afficher_sortie (S);
   fprintf (f, "%d %d \n", S.sx, S.sy);
-
   return S;
 }
 
@@ -43,6 +44,8 @@ ecrire_position_slider (FILE * f, SLIDER S)	//ecrit la position du Slider dans l
   char c;
   POINT p;
   a = 0;
+  fprintf (stderr,
+	   "Cliquez pour afficher le Slider \n");
   while (a != EST_CLIC)
     {
       a = wait_key_arrow_clic (&c, &fl, &p);
@@ -67,18 +70,8 @@ ecrire_nb_murs (FILE * f, SLIDER S)	//Demande nombre de murs
 }
 
 SLIDER
-place_mur (FILE * f, int fl, POINT p, int n, SLIDER S)	//Affiche le mur dans le fichier && sur la fenetre
+mur_fichier (FILE * f, int n, SLIDER S)	//Affiche le mur dans le fichier && sur la fenetre
 {
-  S.murx[n] = p.x / Taille_Case;
-  S.mury[n] = p.y / Taille_Case;
-  if (fl == FLECHE_HAUTE)
-    S.murz[n] = 0;
-  if (fl == FLECHE_DROITE)
-    S.murz[n] = 3;
-  if (fl == FLECHE_BAS)
-    S.murz[n] = 6;
-  if (fl == FLECHE_GAUCHE)
-    S.murz[n] = 9;
   fprintf (f, "%d %d %d\n", S.murx[n], S.mury[n], S.murz[n]);
   afficher_murs (S, n, n);
 
@@ -86,27 +79,97 @@ place_mur (FILE * f, int fl, POINT p, int n, SLIDER S)	//Affiche le mur dans le 
 }
 
 SLIDER
+tourne (POINT p, int n, int i, SLIDER S)
+{
+  S.murx[n] = p.x / Taille_Case;
+  S.mury[n] = p.y / Taille_Case;
+  if (i == 0)
+    {
+      S.murz[n] = 9;
+      efface_mur (S, n);
+      S.murz[n] = 0;
+      afficher_murs (S, n, n);
+    }
+  if (i == 1)
+    {
+      S.murz[n] = 0;
+      efface_mur (S, n);
+      S.murz[n] = 3;
+      afficher_murs (S, n, n);
+    }
+  if (i == 2)
+    {
+      S.murz[n] = 3;
+      efface_mur (S, n);
+      S.murz[n] = 6;
+      afficher_murs (S, n, n);
+    }
+  if (i == 3)
+    {
+      S.murz[n] = 6;
+      efface_mur (S, n);
+      S.murz[n] = 9;
+      afficher_murs (S, n, n);
+    }
+  return S;
+}
+
+SLIDER
+tout_murs (SLIDER S, int n, FILE * f)
+{
+  int a, i, fl,m;
+  char c;
+  POINT p, p1;
+  a = i = 0;
+  m=n;
+  while (n==m)
+    {
+      a = wait_key_arrow_clic (&c, &fl, &p);
+      p1 = p;
+      while (a == EST_CLIC && (p1.x / Taille_Case == p.x / Taille_Case)
+	     && (p1.y / Taille_Case == p.y / Taille_Case) && i < 4)
+		{
+		  S = tourne (p, n, i, S);
+		  a = wait_key_arrow_clic (&c, &fl, &p1);
+		  i++;
+		}
+		
+		if (i!=4)
+		{
+			S = mur_fichier (f, n, S);
+			n++;
+		}
+		
+		  if (i == 4)
+		{
+		  efface_mur (S, n);
+		  i=0;
+		}
+		
+    }
+  return S;
+}
+
+SLIDER
 ecrire_murs (FILE * f, SLIDER S)	//Cree les murs dans la memoire
 {
 
-  int a, fl, n;
-  char c;
-  POINT p;
-  a = n = 0;
+  int n;
+  n = 0;
+
   S.murx = malloc ((S.N) * sizeof (int));
   S.mury = malloc ((S.N) * sizeof (int));
   S.murz = malloc ((S.N) * sizeof (int));
-  printf
-    ("Cliquez sur la case dans laquelle vous voulez un mur, puis sur une fleche pour la placer dans la case");
 
-  while (a != EST_CLIC && n != S.N)
+  fprintf (stderr,
+	   "Cliquez une fois dans une case, puis à chaque clic fait tourner la position du mur \n");
+	     fprintf (stderr,
+	   "Au bout de quatre clics, efface le mur \n");
+  
+
+  while (n < S.N)
     {
-      a = wait_key_arrow_clic (&c, &fl, &p);
-      while (a != EST_FLECHE)
-	{
-	  a = wait_key_arrow_clic (&c, &fl, &p);
-	  S = place_mur (f, fl, p, n, S);
-	}
+      S = tout_murs (S, n, f);
       n++;
     }
   return S;
@@ -116,12 +179,27 @@ SLIDER
 editeur (SLIDER S, int L, int H, char *nom)	//Gere l'edition
 {
   FILE *f = NULL;
+  int fl;
+  char c;
+  POINT p;
+
   f = fopen (nom, "w+");
   S = ecrire_taille_init (f, L, H, S);
   S = ecrire_position_slider (f, S);
   S = ecrire_position_sortie (f, S);
   S = ecrire_nb_murs (f, S);
   S = ecrire_murs (f, S);
-  fclose (f);
+  fprintf (stderr, "Appuyez sur S pour sauvegarder le niveau");
+
+  wait_key_arrow_clic (&c, &fl, &p);
+
+  if (c == 'S')
+    {
+      fclose (f);
+      return S;
+    }
+  else
+    editeur (S, L, H, nom);
+
   return S;
 }

@@ -10,7 +10,7 @@ edition: slider
 	./slider -c 10 10 NiveauCree.slider
 
 dossiercomplet: slider
-	valgrind ./slider dir_slider
+	valgrind --leak-check=full ./slider dir_slider
 
 # Edition de liens
 slider: slider.o lire_ecrire.o afficher.o jeu.o deplacements.o listes_memo.o editeur.o lire_dossier.o
@@ -21,7 +21,7 @@ slider.o: slider.c mes_types.h lire_ecrire.h afficher.h  listes_memo.h editeur.h
 	gcc -c -Wall `sdl-config --cflags` slider.c
 
 # 	
-lire_dossier.o: lire_dossier.h mes_types.h jeu.h
+lire_dossier.o: lire_dossier.c mes_types.h jeu.h
 	gcc -c -Wall `sdl-config --cflags` lire_dossier.c
 
 # Compilation

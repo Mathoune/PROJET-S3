@@ -54,7 +54,9 @@ retour_debut (LISTE l)		//revient à la premiere pos
 void
 libere_murs (SLIDER S)
 {
-
+  free (S.murx);
+  free (S.mury);
+  free (S.murz);
 }
 
 LISTE

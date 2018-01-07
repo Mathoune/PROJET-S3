@@ -9,7 +9,7 @@
 #define nb_fichiers 3
 
 void
-lireDossier (char *s, DIR * rep, char *nom[3])	//Permet de lire le nom de chaque fichier dans le dossier
+lireDossier (char *s, DIR * rep, char *nom[nb_fichiers])	//Permet de lire le nom de chaque fichier dans le dossier
 {
   int i = 0;
   struct dirent *ent = NULL;
@@ -18,7 +18,6 @@ lireDossier (char *s, DIR * rep, char *nom[3])	//Permet de lire le nom de chaque
       if (strcmp (ent->d_name, ".") != 0 && strcmp (ent->d_name, "..") != 0)
 	{
 	  nom[i] = ent->d_name;
-	  printf ("nom = %s \n", nom[i]);
 	  i++;
 	}
 
@@ -26,7 +25,7 @@ lireDossier (char *s, DIR * rep, char *nom[3])	//Permet de lire le nom de chaque
 }
 
 void
-parcourirDossier (DIR * rep, char *nom[3])
+parcourirDossier (DIR * rep, char *nom[nb_fichiers])
 {
   char *chemin = "dir_slider";
   rep = opendir (chemin);
@@ -47,12 +46,12 @@ ouvrir_dir (SLIDER S, LISTE l)
   int i = 0;
   parcourirDossier (rep, nom);
 
-  while (i != 3)
+  while (i != nb_fichiers) //On recommence le jeu pour chaque fichier
     {
 
       char chemin[100] = "dir_slider/";
       strcat (chemin, nom[i]);
-      partie (S, chemin, l);
+      partie (S, chemin, l); //Joue le jeu 
       i++;
     }
 

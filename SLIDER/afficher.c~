@@ -29,11 +29,11 @@ afficher_grille (SLIDER S)	//Affiche le quadrillage
 }
 
 void
-afficher_murs (SLIDER S, int n, int i)	//Affiche les murs, fonction longue car differencie les 4directions des murs
+affichage_mur (SLIDER S, int n, int i, COULEUR C)	//Affiche les murs, fonction longue car differencie les 4directions des murs
 {
 
   POINT p1, p2;
-  while (n <= i)		// L'utilisation de n et i est importante pour le mode editeur pour faire les mur 1 par 1
+  while (n <= i)		// L'utilisation de n et i est importante pour le mode editeur pour faire les murs 1 par 1
     {
       if (S.murz[n] == 0)
 	{
@@ -59,9 +59,21 @@ afficher_murs (SLIDER S, int n, int i)	//Affiche les murs, fonction longue car d
 	  p2.y = p1.y + Taille_Case;
 	  p1.x = p2.x = (S.murx[n]) * Taille_Case;
 	}
-      draw_line (p1, p2, red);
+      draw_line (p1, p2, C);
       n++;
     }
+}
+
+void
+efface_mur (SLIDER S, int n)
+{
+  affichage_mur (S, n, n, gray);
+}
+
+void
+afficher_murs (SLIDER S, int n, int i)
+{
+  affichage_mur (S, n, i, red);
 }
 
 void
@@ -88,6 +100,8 @@ afficher_sortie (SLIDER S)	//Affiche la sortie
   p2.y = p1.y + Taille_Case;
   draw_fill_rectangle (p1, p2, white);
 }
+
+
 
 void
 afficher_slider (SLIDER S)	//Affiche tout

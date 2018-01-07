@@ -19,12 +19,14 @@ main (int argc, char *argv[])
   char *c;
   c = "dir_slider";
 
-  if (argv[1][0] == '-' && argv[1][1] == 'c')	//On verifie si c'est le mode edition
+
+  if (strcmp (argv[1], "-c") == 0)	//On verifie si c'est le mode edition
     {
       int L, H;
       L = atoi (argv[2]);	// Convertit les nombres donnés en entiers
-      H = atoi (argv[3]);
-      S = editeur (S, L, H, argv[4]);	//Initialise le Slider en mode edition
+      H = atoi (argv[3]);	//Initialise le Slider en mode edition    
+      S = editeur (S, L, H, argv[4]);
+
       partie (S, argv[4], l);
     }
   if (strcmp (argv[1], c) == 0)	// On verifie si c'est le mode de lecture du dossier complet
@@ -32,7 +34,9 @@ main (int argc, char *argv[])
       ouvrir_dir (S, l);
     }
 
-  else				//Sinon on joue une partie classique
+  printf ("argv1= %s", argv[1]);
+
+  if ((strcmp (argv[1], "-c") != 0) && (strcmp (argv[1], c) != 0))	//Sinon on joue une partie classique
     partie (S, argv[1], l);
 
   exit (0);

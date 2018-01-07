@@ -35,6 +35,7 @@ mur_verticalD (SLIDER S)	// Retourne la postion à droite du mur le plus proche 
 {
   int a, tmp, n;
   a = tmp = S.L + 1;
+
   for (n = 0; n < S.N; n++)
     {
       if (S.mury[n] == S.y && S.murx[n] == S.x && S.murz[n] == 3)
@@ -45,9 +46,10 @@ mur_verticalD (SLIDER S)	// Retourne la postion à droite du mur le plus proche 
 	tmp = S.murx[n];
       if (tmp < a)
 	a = tmp;
-      if (a == S.L + 1)
-	a = S.L - 1;
     }
+  if (a == S.L + 1)
+    a = S.L - 1;
+
   return a;
 }
 
@@ -113,7 +115,6 @@ avance_droite (SLIDER S)	//Avance le Slider vers la droite
       S.ps.x += Taille_Case;
       afficher_le_slider (S);
     }
-
   return S;
 }
 

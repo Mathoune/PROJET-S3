@@ -58,6 +58,8 @@ partie (SLIDER S, char *nom, LISTE l)
   l = bouge (S, l);
   finir_affichage (S);
   libere_murs (S);
-  libere_liste (l);
+  l = libere_liste (l);
+  if (l != NULL)
+    printf ("erreur vide");
   wait_escape ();
 }
