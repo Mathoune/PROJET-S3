@@ -24,20 +24,21 @@ main (int argc, char *argv[])
     {
       int L, H;
       L = atoi (argv[2]);	// Convertit les nombres donnés en entiers
-      H = atoi (argv[3]);	//Initialise le Slider en mode edition    
-      S = editeur (S, L, H, argv[4]);
+      H = atoi (argv[3]);
+      S = editeur (S, L, H, argv[4]);	//Initialise le Slider en mode edition 
 
       partie (S, argv[4], l);
     }
+    
   if (strcmp (argv[1], c) == 0)	// On verifie si c'est le mode de lecture du dossier complet
     {
-      ouvrir_dir (S, l);
+      ouvrir_dir (S,l);
     }
 
-  printf ("argv1= %s", argv[1]);
 
   if ((strcmp (argv[1], "-c") != 0) && (strcmp (argv[1], c) != 0))	//Sinon on joue une partie classique
-    partie (S, argv[1], l);
+		partie (S, argv[1], l);
+
 
   wait_escape ();
   exit (0);

@@ -59,7 +59,6 @@ partie (SLIDER S, char *nom, LISTE l)
   finir_affichage (S);
   libere_murs (S);
   l = libere_liste (l);
-  if (l != NULL)
-    printf ("erreur vide");
-  wait_escape ();
+  if (l != NULL) printf ("erreur vide");
+  attendre(100);
 }

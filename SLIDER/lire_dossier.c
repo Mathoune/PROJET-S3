@@ -2,29 +2,36 @@
 #include <stdio.h>
 #include <dirent.h>		//Permet d'utiliser des fonction pour les dossiers et repertoires
 #include <string.h>
+#include <uvsqgraphics.h>
 #include "mes_types.h"
 #include "jeu.h"
 
 
-#define nb_fichiers 3
+#define nb_fichiers 4
+/* Dans le mode de lecture de plusieurs fichiers, j'ai une perte de memoire constante de 1173 blocks
+ * 
+ */
 
 void
 lireDossier (char *s, DIR * rep, char *nom[nb_fichiers])	//Permet de lire le nom de chaque fichier dans le dossier
 {
   int i = 0;
   struct dirent *ent = NULL;
-  while ((ent = readdir (rep)))
+  while ((ent = readdir (rep))&& i<nb_fichiers)
     {
       if (strcmp (ent->d_name, ".") != 0 && strcmp (ent->d_name, "..") != 0)
 	{
 	  nom[i] = ent->d_name;
-	  i++;
+	  printf("nom[%d]= %s \n",i, nom[i]);  
+	  i++;	
+	  
 	}
+	
 
     }
 }
 
-void
+DIR *
 parcourirDossier (DIR * rep, char *nom[nb_fichiers])
 {
   char *chemin = "dir_slider";
@@ -36,6 +43,7 @@ parcourirDossier (DIR * rep, char *nom[nb_fichiers])
       exit (-1);
     }
   lireDossier (chemin, rep, nom);
+  return rep;
 }
 
 void
@@ -44,18 +52,17 @@ ouvrir_dir (SLIDER S, LISTE l)
   DIR *rep = NULL;
   char *nom[nb_fichiers];
   int i = 0;
-  parcourirDossier (rep, nom);
+  rep=parcourirDossier (rep, nom);
 
-  while (i != nb_fichiers) //On recommence le jeu pour chaque fichier
+  while (i != nb_fichiers)	//On recommence le jeu pour chaque fichier
     {
-
       char chemin[100] = "dir_slider/";
       strcat (chemin, nom[i]);
-      partie (S, chemin, l); //Joue le jeu 
+      partie (S, chemin, l);	//Joue le jeu 
       i++;
     }
 
-  if (closedir (rep) == -1)
+  if (closedir(rep) == -1)
     {
       printf ("fermeture dossier impossible");
       exit (-1);

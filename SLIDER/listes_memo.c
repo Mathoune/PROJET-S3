@@ -57,7 +57,7 @@ libere_murs (SLIDER S)
   free (S.murx);
   free (S.mury);
   free (S.murz);
-}
+ }
 
 LISTE
 retour (LISTE l, SLIDER S, int c)

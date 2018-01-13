@@ -10,7 +10,7 @@ edition: slider
 	./slider -c 10 10 NiveauCree.slider
 
 dossiercomplet: slider
-	valgrind --leak-check=full ./slider dir_slider
+	valgrind ./slider dir_slider
 
 # Edition de liens
 slider: slider.o lire_ecrire.o afficher.o jeu.o deplacements.o listes_memo.o editeur.o lire_dossier.o

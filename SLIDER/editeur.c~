@@ -5,7 +5,8 @@
 #include "afficher.h"
 
 
-SLIDER ecrire_taille_init (FILE * f, int L, int H, SLIDER S)	//ecrit la taille de la fenetre dans le fichier & affiche la grille
+SLIDER
+ecrire_taille_init (FILE * f, int L, int H, SLIDER S)	//ecrit la taille de la fenetre dans le fichier & affiche la grille
 {
   fprintf (f, "%d %d \n", L, H);
   S.L = L;
@@ -15,12 +16,15 @@ SLIDER ecrire_taille_init (FILE * f, int L, int H, SLIDER S)	//ecrit la taille d
   return S;
 }
 
-SLIDER ecrire_position_sortie (FILE * f, SLIDER S)	//ecrit la position de la sortie dans le fichier & l'affiche
+SLIDER
+ecrire_position_sortie (FILE * f, SLIDER S)	//ecrit la position de la sortie dans le fichier & l'affiche
 {
   int a, fl;
   char c;
   POINT p;
   a = 0;
+  fprintf (stderr,
+	   "Cliquez pour afficher la sortie \n");
   while (a != EST_CLIC)
     {
       a = wait_key_arrow_clic (&c, &fl, &p);
@@ -33,12 +37,15 @@ SLIDER ecrire_position_sortie (FILE * f, SLIDER S)	//ecrit la position de la sor
   return S;
 }
 
-SLIDER ecrire_position_slider (FILE * f, SLIDER S)	//ecrit la position du Slider dans le fichier & l'affiche
+SLIDER
+ecrire_position_slider (FILE * f, SLIDER S)	//ecrit la position du Slider dans le fichier & l'affiche
 {
   int a, fl;
   char c;
   POINT p;
   a = 0;
+  fprintf (stderr,
+	   "Cliquez pour afficher le Slider \n");
   while (a != EST_CLIC)
     {
       a = wait_key_arrow_clic (&c, &fl, &p);
@@ -53,7 +60,8 @@ SLIDER ecrire_position_slider (FILE * f, SLIDER S)	//ecrit la position du Slider
   return S;
 }
 
-SLIDER ecrire_nb_murs (FILE * f, SLIDER S)	//Demande nombre de murs
+SLIDER
+ecrire_nb_murs (FILE * f, SLIDER S)	//Demande nombre de murs
 {
   printf ("indiquez le nombre de murs souhaité : ");
   scanf ("%d", &S.N);
@@ -61,7 +69,8 @@ SLIDER ecrire_nb_murs (FILE * f, SLIDER S)	//Demande nombre de murs
   return S;
 }
 
-SLIDER mur_fichier (FILE * f, int n, SLIDER S)	//Affiche le mur dans le fichier && sur la fenetre
+SLIDER
+mur_fichier (FILE * f, int n, SLIDER S)	//Affiche le mur dans le fichier && sur la fenetre
 {
   fprintf (f, "%d %d %d\n", S.murx[n], S.mury[n], S.murz[n]);
   afficher_murs (S, n, n);
@@ -69,7 +78,8 @@ SLIDER mur_fichier (FILE * f, int n, SLIDER S)	//Affiche le mur dans le fichier 
   return S;
 }
 
-SLIDER tourne (POINT p, int n, int i, SLIDER S)
+SLIDER
+tourne (POINT p, int n, int i, SLIDER S)
 {
   S.murx[n] = p.x / Taille_Case;
   S.mury[n] = p.y / Taille_Case;
@@ -104,37 +114,44 @@ SLIDER tourne (POINT p, int n, int i, SLIDER S)
   return S;
 }
 
-SLIDER tout_murs (SLIDER S, int n, FILE *f)
+SLIDER
+tout_murs (SLIDER S, int n, FILE * f)
 {
-  int a,i,fl;
+  int a, i, fl,m;
   char c;
   POINT p, p1;
   a = i = 0;
-  while (a != EST_CLIC)
+  m=n;
+  while (n==m)
     {
       a = wait_key_arrow_clic (&c, &fl, &p);
       p1 = p;
       while (a == EST_CLIC && (p1.x / Taille_Case == p.x / Taille_Case)
 	     && (p1.y / Taille_Case == p.y / Taille_Case) && i < 4)
-	{
-	  printf ("%d i= %d \n", n, i);
-	  S = tourne (p, n, i, S);
-	  a = wait_key_arrow_clic (&c, &fl, &p1);
-	  i++;
-	}
-      n++;
-      if (i == 4)
-	{
-	  efface_mur (S, n - 1);
-	  n--;
-	}
-      i = 0;
-      S = mur_fichier (f, n, S);
+		{
+		  S = tourne (p, n, i, S);
+		  a = wait_key_arrow_clic (&c, &fl, &p1);
+		  i++;
+		}
+		
+		if (i!=4)
+		{
+			S = mur_fichier (f, n, S);
+			n++;
+		}
+		
+		  if (i == 4)
+		{
+		  efface_mur (S, n);
+		  i=0;
+		}
+		
     }
-    return S;
+  return S;
 }
 
-SLIDER ecrire_murs (FILE * f, SLIDER S)	//Cree les murs dans la memoire
+SLIDER
+ecrire_murs (FILE * f, SLIDER S)	//Cree les murs dans la memoire
 {
 
   int n;
@@ -145,43 +162,44 @@ SLIDER ecrire_murs (FILE * f, SLIDER S)	//Cree les murs dans la memoire
   S.murz = malloc ((S.N) * sizeof (int));
 
   fprintf (stderr,
-	   "Cliquez une fois dans une case, puis à chaque clic fait tourner la position du mur, au bout de quatre clics, efface le mur \n");
-  fprintf (stderr,
-	   "Appuyez sur une touche pour valider la position du mur \n");
+	   "Cliquez une fois dans une case, puis à chaque clic fait tourner la position du mur \n");
+	     fprintf (stderr,
+	   "Au bout de quatre clics, efface le mur \n");
+  
 
   while (n < S.N)
     {
-      S = tout_murs (S, n,f);
+      S = tout_murs (S, n, f);
       n++;
     }
- return S;
+  return S;
 }
 
-SLIDER editeur (SLIDER S, int L, int H, char *nom)	//Gere l'edition
+SLIDER
+editeur (SLIDER S, int L, int H, char *nom)	//Gere l'edition
 {
   FILE *f = NULL;
   int fl;
   char c;
   POINT p;
 
-    f = fopen (nom, "w+");
-    S = ecrire_taille_init (f, L, H, S);
-    S = ecrire_position_slider (f, S);
-    S = ecrire_position_sortie (f, S);
-    S = ecrire_nb_murs (f, S);
-    S = ecrire_murs (f, S);
-    fprintf (stderr, "Appuyez sur S pour sauvegarder le niveau");
+  f = fopen (nom, "w+");
+  S = ecrire_taille_init (f, L, H, S);
+  S = ecrire_position_slider (f, S);
+  S = ecrire_position_sortie (f, S);
+  S = ecrire_nb_murs (f, S);
+  S = ecrire_murs (f, S);
+  fprintf (stderr, "Appuyez sur S pour sauvegarder le niveau");
 
-   wait_key_arrow_clic (&c, &fl, &p);
+  wait_key_arrow_clic (&c, &fl, &p);
 
-    attendre (50);
   if (c == 'S')
     {
       fclose (f);
       return S;
     }
   else
-      editeur (S, L, H, nom);
+    editeur (S, L, H, nom);
 
- return S;
+  return S;
 }

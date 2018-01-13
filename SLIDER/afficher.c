@@ -79,15 +79,14 @@ afficher_murs (SLIDER S, int n, int i)
 void
 afficher_le_slider (SLIDER S)	//Affiche le Slider
 {
-  draw_fill_circle (S.ps, Demi_Case, red);
+  draw_fill_circle (S.ps, Demi_Case-6, red);
 }
 
 void
 effacer_le_slider (SLIDER S)	//Efface le Slider
 {
-  draw_fill_circle (S.ps, Demi_Case, noir);
+  draw_fill_circle (S.ps, Demi_Case-6, noir);
 }
-
 
 void
 afficher_sortie (SLIDER S)	//Affiche la sortie
@@ -100,8 +99,6 @@ afficher_sortie (SLIDER S)	//Affiche la sortie
   p2.y = p1.y + Taille_Case;
   draw_fill_rectangle (p1, p2, white);
 }
-
-
 
 void
 afficher_slider (SLIDER S)	//Affiche tout
@@ -120,7 +117,6 @@ affichage (SLIDER S)		//L'affichage necessaire après un coup joué
   afficher_murs (S, 0, S.N - 1);
   afficher_le_slider (S);
 }
-
 
 void
 finir_affichage (SLIDER S)	//Affiche un message de fin 

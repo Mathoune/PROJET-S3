@@ -37,7 +37,6 @@ lire_murs (FILE * fichier, SLIDER S)	//Alloue de la memoire & lit les murs dans 
   while (n != S.N)
     {
       fscanf (fichier, "%d %d %d", &S.murx[n], &S.mury[n], &S.murz[n]);
-      printf ("%d %d %d \n", S.murx[n], S.mury[n], S.murz[n]);
       n++;
     }
 

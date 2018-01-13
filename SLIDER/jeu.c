@@ -44,7 +44,6 @@ bouge (SLIDER S, LISTE l)	//Gere le mouvement du Slider
 	  afficher_le_slider (S);
 
 	}
-      S.coups++;
     }
   return l;
 }
@@ -52,13 +51,13 @@ bouge (SLIDER S, LISTE l)	//Gere le mouvement du Slider
 void
 partie (SLIDER S, char *nom, LISTE l)
 {
-  printf ("nom du fichier %s \n", nom);
   S = init_slider (nom);
   afficher_slider (S);
   l = bouge (S, l);
   finir_affichage (S);
   libere_murs (S);
   l = libere_liste (l);
-  if (l != NULL) printf ("erreur vide");
-  attendre(100);
+  if (l != NULL) printf ("erreur free liste");
+    
+   attendre(800);
 }

@@ -54,7 +54,7 @@ mur_verticalD (SLIDER S)	// Retourne la postion à droite du mur le plus proche 
 }
 
 int
-mur_horizontalH (SLIDER S)	// retourne la position du slider au dessus du mur le plus proche de lui
+mur_horizontalH (SLIDER S)	// Retourne la position du slider au dessus du mur le plus proche de lui
 {
   int a, tmp, n;
   a = tmp = S.H + 1;
@@ -183,7 +183,7 @@ avance_bas (SLIDER S)		//Avance le Slider vers le bas
 }
 
 SLIDER
-deplace (int f, SLIDER S)	//Gere tout le deplacement, selon lafleche appuyée
+deplace (int f, SLIDER S)	//Gere tout le deplacement, selon la fleche appuyée
 {
   if (f == FLECHE_GAUCHE)
     S = avance_gauche (S);
