@@ -32,10 +32,13 @@ lire_murs (FILE * fichier, SLIDER S)	//Alloue de la memoire & lit les murs dans 
   S.murx = malloc ((S.N) * sizeof (int));
   S.mury = malloc ((S.N) * sizeof (int));
   S.murz = malloc ((S.N) * sizeof (int));
-   if (S.murx ==NULL) printf("erreur alloc murx \n");
-  if (S.mury ==NULL) printf("erreur alloc mury \n");
-  if (S.murz ==NULL) printf("erreur alloc murz \n");
-  
+  if (S.murx == NULL)
+    printf ("erreur alloc murx \n");
+  if (S.mury == NULL)
+    printf ("erreur alloc mury \n");
+  if (S.murz == NULL)
+    printf ("erreur alloc murz \n");
+
   int n = 0;
   while (n != S.N)
     {

@@ -4,7 +4,7 @@
 #include <string.h>
 #include <uvsqgraphics.h>
 #include "mes_types.h"
-#include "jeu.h"
+#include "deplacements.h"
 
 
 #define nb_fichiers 4
@@ -17,22 +17,19 @@ lireDossier (char *s, DIR * rep, char *nom[nb_fichiers])	//Permet de lire le nom
 {
   int i = 0;
   struct dirent *ent = NULL;
-  while ((ent = readdir (rep))&& i<nb_fichiers)
+  while ((ent = readdir (rep)) && i < nb_fichiers)
     {
       if (strcmp (ent->d_name, ".") != 0 && strcmp (ent->d_name, "..") != 0)
 	{
-	  nom[i] = ent->d_name;
-	  printf("nom[%d]= %s \n",i, nom[i]);  
-	  i++;	
-	  
-	}
-	
+	  nom[i] = ent->d_name;	//Ajoute le nom de chaque fichiers dans le tableau nom
+	  i++;
 
+	}
     }
 }
 
 DIR *
-parcourirDossier (DIR * rep, char *nom[nb_fichiers])
+parcourirDossier (DIR * rep, char *nom[nb_fichiers])	// Ouvre le dossier et execute lireDossier
 {
   char *chemin = "dir_slider";
   rep = opendir (chemin);
@@ -47,12 +44,12 @@ parcourirDossier (DIR * rep, char *nom[nb_fichiers])
 }
 
 void
-ouvrir_dir (SLIDER S, LISTE l)
+ouvrir_dir (SLIDER S, LISTE l)	// Permet de jouer avec tous les fichiers du dossier dir_slider
 {
   DIR *rep = NULL;
   char *nom[nb_fichiers];
   int i = 0;
-  rep=parcourirDossier (rep, nom);
+  rep = parcourirDossier (rep, nom);
 
   while (i != nb_fichiers)	//On recommence le jeu pour chaque fichier
     {
@@ -62,7 +59,7 @@ ouvrir_dir (SLIDER S, LISTE l)
       i++;
     }
 
-  if (closedir(rep) == -1)
+  if (closedir (rep) == -1)
     {
       printf ("fermeture dossier impossible");
       exit (-1);

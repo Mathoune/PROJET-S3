@@ -52,15 +52,15 @@ retour_debut (LISTE l)		//revient à la premiere pos
 }
 
 void
-libere_murs (SLIDER S)
+libere_murs (SLIDER S)		//Libere les mallocs des murs
 {
   free (S.murx);
   free (S.mury);
   free (S.murz);
- }
+}
 
 LISTE
-retour (LISTE l, SLIDER S, int c)
+retour (LISTE l, SLIDER S, int c)	//Permet de revenir en arriere dans les coups joués
 {
   effacer_le_slider (S);
   if (l != NULL && c == 'U')	//Pour faire le undo

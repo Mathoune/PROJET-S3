@@ -19,6 +19,7 @@ afficher_grille (SLIDER S)	//Affiche le quadrillage
       p1.x += Taille_Case;
       draw_line (p1, p2, gray);
     }
+
   p1.x = 0;
   p2.x = Taille_Case * S.L;
   for (p2.y = Taille_Case; p2.y < S.H * Taille_Case; p2.y += Taille_Case)
@@ -79,13 +80,13 @@ afficher_murs (SLIDER S, int n, int i)
 void
 afficher_le_slider (SLIDER S)	//Affiche le Slider
 {
-  draw_fill_circle (S.ps, Demi_Case-6, red);
+  draw_fill_circle (S.ps, Demi_Case - 6, red);
 }
 
 void
 effacer_le_slider (SLIDER S)	//Efface le Slider
 {
-  draw_fill_circle (S.ps, Demi_Case-6, noir);
+  draw_fill_circle (S.ps, Demi_Case - 6, noir);
 }
 
 void
